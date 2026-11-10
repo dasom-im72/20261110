@@ -10,6 +10,7 @@ function figure(kind, suffix = 'default') {
   return `<svg viewBox="0 0 300 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${defs}${shape}</svg>`;
 }
 
+const escapeHTML = window.FigroomDB.escape;
 const $ = (selector) => document.querySelector(selector);
 const money = (number) => number.toLocaleString('ko-KR') + '원';
 let products = [], filter = '전체';
@@ -20,18 +21,18 @@ $('#hero-figure').innerHTML = figure('astronaut', 'hero');
 function toast(message) { $('#toast').textContent = message; $('#toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').classList.remove('visible'), 2400); }
 function updateCart() {
   try { localStorage.setItem('figroom-cart', JSON.stringify(cart)); } catch { /* Session-only cart. */ }
-  const entries = products.filter(p => cart[p.id]);
+  const entries = products.filter(p => cart[p.id] && !p.is_sold_out);
   $('#cart-count').textContent = entries.reduce((sum, p) => sum + cart[p.id], 0);
-  $('#cart-items').innerHTML = entries.length ? entries.map(p => `<div class="cart-row"><div><b>${p.name}</b><small>${money(p.price)}</small></div><div class="quantity"><button data-quantity="${p.id}" data-change="-1" aria-label="${p.name} 수량 줄이기">−</button><span>${cart[p.id]}</span><button data-quantity="${p.id}" data-change="1" aria-label="${p.name} 수량 늘리기">+</button></div></div>`).join('') : '<p class="empty">아직 장바구니가 비어 있어요.<br>마음에 드는 작은 우주를 담아보세요.</p>';
+  $('#cart-items').innerHTML = entries.length ? entries.map(p => `<div class="cart-row"><div><b>${escapeHTML(p.name)}</b><small>${money(p.price)}</small></div><div class="quantity"><button data-quantity="${p.id}" data-change="-1" aria-label="${escapeHTML(p.name)} 수량 줄이기">−</button><span>${cart[p.id]}</span><button data-quantity="${p.id}" data-change="1" aria-label="${escapeHTML(p.name)} 수량 늘리기">+</button></div></div>`).join('') : '<p class="empty">아직 장바구니가 비어 있어요.<br>마음에 드는 작은 우주를 담아보세요.</p>';
   $('#cart-total').textContent = money(entries.reduce((sum, p) => sum + p.price * cart[p.id], 0));
 }
-function add(id) { if (!products.some(p => p.id === id)) return; cart[id] = Math.min((cart[id] || 0) + 1, 99); updateCart(); toast('장바구니에 담았어요. 작은 행복 하나 추가!'); }
+function add(id) { if (!products.some(p => p.id === id && !p.is_sold_out)) return; cart[id] = Math.min((cart[id] || 0) + 1, 99); updateCart(); toast('장바구니에 담았어요. 작은 행복 하나 추가!'); }
 function render() {
   const query = $('#search').value.trim().toLowerCase();
-  let items = products.filter(p => (filter === '전체' || (filter === '예약' ? p.badge === 'PRE-ORDER' : filter === '신상품' ? p.badge === 'NEW' : p.category === filter)) && `${p.name} ${p.series}`.toLowerCase().includes(query));
+  let items = products.filter(p => (filter === '전체' || (filter === '예약' ? p.badge === 'PRE-ORDER' : filter === '신상품' ? p.badge === 'NEW' : p.category === filter)) && `${escapeHTML(p.name)} ${escapeHTML(p.series)}`.toLowerCase().includes(query));
   if ($('#sort').value !== 'featured') items.sort((a, b) => $('#sort').value === 'low' ? a.price - b.price : b.price - a.price);
   $('#products').classList.toggle('filtered', filter !== '전체' || !!query || $('#sort').value !== 'featured');
-  $('#products').innerHTML = items.length ? items.map(p => `<article class="product-card"><button class="product-image ${p.color}" data-detail="${p.id}" aria-label="${p.name} 상세 보기">${p.badge ? `<span class="badge ${p.badge === 'PRE-ORDER' ? 'preorder' : ''}">${p.badge}</span>` : ''}${figure(p.kind, p.id)}</button><p class="series">${p.series}</p><h3>${p.name}</h3><p class="price">${p.price.toLocaleString('ko-KR')}<span>원</span></p><button class="add" data-add="${p.id}" aria-label="${p.name} 장바구니에 담기">+</button></article>`).join('') : '<p class="empty">검색 결과가 없어요. 다른 검색어를 입력해 보세요.</p>';
+  $('#products').innerHTML = items.length ? items.map(p => `<article class="product-card"><button class="product-image ${p.color}" data-detail="${p.id}" aria-label="${escapeHTML(p.name)} 상세 보기">${p.badge ? `<span class="badge ${p.badge === 'PRE-ORDER' ? 'preorder' : ''}">${escapeHTML(p.badge)}</span>` : ''}${productArt(p, p.id)}</button><p class="series">${escapeHTML(p.series)}</p><h3>${escapeHTML(p.name)}</h3><p class="price">${p.price.toLocaleString('ko-KR')}${p.is_sold_out ? ' (SOLD OUT)' : ''}<span>원</span></p><button class="add" data-add="${p.id}" ${p.is_sold_out ? 'disabled' : ''} aria-label="${escapeHTML(p.name)} 장바구니에 담기">+</button></article>`).join('') : '<p class="empty">검색 결과가 없어요. 다른 검색어를 입력해 보세요.</p>';
 }
 function setFilter(value) { filter = value; document.querySelectorAll('[data-filter]').forEach(b => { b.classList.toggle('active', b.dataset.filter === value); b.setAttribute('aria-pressed', String(b.dataset.filter === value)); }); render(); }
 document.addEventListener('click', event => {
@@ -39,7 +40,7 @@ document.addEventListener('click', event => {
   const filterButton = event.target.closest('[data-filter]'); if (filterButton) setFilter(filterButton.dataset.filter);
   const nav = event.target.closest('[data-nav]'); if (nav) setFilter(nav.dataset.nav === 'new' ? '신상품' : '예약');
   const detail = event.target.closest('[data-detail]');
-  if (detail) { const p = products.find(p => p.id === Number(detail.dataset.detail)); $('#product-detail').innerHTML = `<div class="detail-art ${p.color}">${figure(p.kind, 'detail')}</div><div class="detail-copy"><p class="series">${p.series}</p><h2 id="detail-title">${p.name}</h2><p>${p.scale} · ${p.category}</p><p>${money(p.price)}</p><p class="demo-note">${p.badge === 'PRE-ORDER' ? '예약 상품 예시입니다. 출시 일정은 정해져 있지 않습니다.' : '나만의 공간에 작은 즐거움을 더하는 컬렉터블 피규어입니다.'}</p><button class="button dark" data-add="${p.id}">장바구니에 담기 <span>+</span></button></div>`; $('#product-dialog').showModal(); }
+  if (detail) { const p = products.find(p => p.id === Number(detail.dataset.detail)); $('#product-detail').innerHTML = `<div class="detail-art ${p.color}">${productArt(p, 'detail')}</div><div class="detail-copy"><p class="series">${escapeHTML(p.series)}</p><h2 id="detail-title">${escapeHTML(p.name)}</h2><p>${escapeHTML(p.scale)} · ${escapeHTML(p.category)}</p><p>${money(p.price)}</p><p class="demo-note">${p.badge === 'PRE-ORDER' ? '예약 상품 예시입니다. 출시 일정은 정해져 있지 않습니다.' : '나만의 공간에 작은 즐거움을 더하는 컬렉터블 피규어입니다.'}</p><p>${escapeHTML(p.description || '')}</p><button class="button dark" data-add="${p.id}" ${p.is_sold_out ? 'disabled' : ''}>장바구니에 담기 <span>+</span></button></div>`; $('#product-dialog').showModal(); }
   const quantity = event.target.closest('[data-quantity]'); if (quantity) { const id = quantity.dataset.quantity; cart[id] = Math.min(99, (cart[id] || 0) + Number(quantity.dataset.change)); if (cart[id] <= 0) delete cart[id]; updateCart(); }
   if (event.target.closest('[data-close]')) event.target.closest('dialog').close();
 });
@@ -48,5 +49,25 @@ $('#cart-open').addEventListener('click', () => { updateCart(); $('#cart-dialog'
 $('#search-toggle').addEventListener('click', () => { $('#search-panel').hidden = !$('#search-panel').hidden; if (!$('#search-panel').hidden) { $('#collection').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); $('#search').focus({ preventScroll: true }); } });
 $('#search').addEventListener('input', render);
 $('#sort').addEventListener('change', render);
-async function init() { try { const response = await fetch('./products.json'); if (!response.ok) throw new Error('상품 요청 실패'); products = await response.json(); cart = Object.fromEntries(Object.entries(cart).filter(([id]) => products.some(p => p.id === Number(id)))); setFilter('전체'); updateCart(); } catch { $('#products').innerHTML = '<p class="empty">상품을 불러오지 못했어요. 파이썬 서버 실행 후 새로고침해 주세요.</p>'; } }
+function productArt(product, suffix) {
+  const image = window.FigroomDB.imageUrl(product.image_url);
+  return image ? `<img class="product-photo" src="${escapeHTML(image)}" alt="${escapeHTML(product.name)}" loading="lazy" referrerpolicy="no-referrer">` : figure(product.kind, suffix);
+}
+
+async function init() {
+  try {
+    const rows = await window.FigroomDB.products();
+    products = rows.map(p => ({
+      ...p,
+      color: ['mint', 'yellow', 'purple', 'pink', 'blue'].includes(p.color) ? p.color : 'mint',
+      kind: ['astronaut', 'forest', 'cat', 'robot'].includes(p.kind) ? p.kind : 'astronaut',
+    })).filter(p => Number.isSafeInteger(p.id) && Number.isInteger(p.price) && p.price >= 0);
+    cart = Object.fromEntries(Object.entries(cart).filter(([id]) => products.some(p => p.id === Number(id) && !p.is_sold_out)));
+    const count = document.querySelector('[data-filter] span');
+    if (count) count.textContent = String(products.length).padStart(2, '0');
+    setFilter('전체'); updateCart();
+  } catch {
+    $('#products').innerHTML = '<p class="empty">상품을 불러오지 못했어요. 잠시 후 새로고침해 주세요.</p>';
+  }
+}
 init();

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>상품 관리 · FIGROOM</title>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="admin.css">
+  <script src="supabase-client.js" defer></script><script src="admin.js" defer></script>
+</head>
+<body>
+  <header class="header wrap"><a class="logo" href="index.html">figroom<span>®</span></a><a href="index.html">스토어로 돌아가기 ↗</a></header>
+  <main class="wrap admin-main">
+    <div class="eyebrow">FIGROOM ADMIN</div><h1>상품 관리</h1>
+    <p id="message" role="status" aria-live="polite"></p>
+    <section id="login-panel" class="admin-panel">
+      <h2>관리자 로그인</h2><p>등록된 관리자 계정으로 로그인하세요.</p>
+      <form id="login-form">
+        <label>이메일<input id="email" type="email" autocomplete="username" required></label>
+        <label>비밀번호<input id="password" type="password" autocomplete="current-password" required></label>
+        <button class="button dark" type="submit">로그인 ↗</button>
+      </form>
+    </section>
+    <section id="admin-panel" hidden>
+      <div class="admin-toolbar"><span id="product-count"></span><div><button id="refresh" class="button">새로고침</button><button id="logout" class="button">로그아웃</button></div></div>
+      <div id="seed-panel" class="admin-panel" hidden><p>아직 상품이 없습니다. 기존 데모 상품 6개를 한 번에 등록할 수 있어요.</p><button id="seed" class="button dark">기존 상품 6개 등록</button></div>
+      <div class="admin-layout">
+        <section class="admin-panel">
+          <h2 id="form-title">새 상품 추가</h2>
+          <form id="product-form">
+            <label>상품명<input name="name" required maxlength="150"></label>
+            <label>시리즈<input name="series" maxlength="150"></label>
+            <label>카테고리<select name="category"><option>오리지널</option><option>아트토이</option><option>프라모델</option></select></label>
+            <label>가격 (원)<input name="price" type="number" min="0" max="2147483647" step="1" required></label>
+            <label>크기·스케일<input name="scale" maxlength="150"></label>
+            <label>설명<textarea name="description" rows="4" maxlength="5000"></textarea></label>
+            <label>배지<select name="badge"><option value="">없음</option><option>BEST</option><option>NEW</option><option>PRE-ORDER</option></select></label>
+            <label>기본 일러스트<select name="kind"><option value="astronaut">우주인</option><option value="forest">숲의 수호자</option><option value="cat">고양이</option><option value="robot">로봇</option></select></label>
+            <label>배경색<select name="color"><option value="mint">민트</option><option value="yellow">노랑</option><option value="purple">보라</option><option value="pink">분홍</option><option value="blue">파랑</option></select></label>
+            <label>이미지 URL (선택)<input name="image_url" type="url" placeholder="https://..."></label>
+            <label>이미지 업로드 (선택)<input id="image-file" type="file" accept="image/jpeg,image/png,image/webp"></label>
+            <p class="admin-hint">JPG·PNG·WebP, 최대 5MB. 이미지를 지정하지 않으면 기본 일러스트를 사용합니다.</p>
+            <label class="check-label"><input name="is_published" type="checkbox"> 스토어에 공개</label>
+            <label class="check-label"><input name="is_sold_out" type="checkbox"> 품절</label>
+            <div class="admin-actions"><button class="button dark" type="submit">저장</button><button id="cancel-edit" class="button" type="button">새 상품 작성</button></div>
+          </form>
+        </section>
+        <section class="admin-panel"><h2>등록된 상품</h2><div id="product-list"></div></section>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
