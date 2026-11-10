@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "코스믹 익스플로러",
+    "series": "SPACE ODYSSEY",
+    "category": "오리지널",
+    "price": 89000,
+    "color": "mint",
+    "kind": "astronaut",
+    "badge": "BEST",
+    "scale": "1/8 스케일 · 22cm"
+  },
+  {
+    "id": 2,
+    "name": "모리, 숲의 작은 수호자",
+    "series": "LITTLE FOREST",
+    "category": "아트토이",
+    "price": 42000,
+    "color": "yellow",
+    "kind": "forest",
+    "badge": "NEW",
+    "scale": "논스케일 · 14cm"
+  },
+  {
+    "id": 3,
+    "name": "네오 러너 : 미드나잇",
+    "series": "NEON DISTRICT",
+    "category": "오리지널",
+    "price": 128000,
+    "color": "purple",
+    "kind": "robot",
+    "badge": "PRE-ORDER",
+    "scale": "1/7 스케일 · 26cm"
+  },
+  {
+    "id": 4,
+    "name": "버블 캣 · 피치 에디션",
+    "series": "SUNDAY FRIENDS",
+    "category": "아트토이",
+    "price": 35000,
+    "color": "pink",
+    "kind": "cat",
+    "badge": "NEW",
+    "scale": "논스케일 · 12cm"
+  },
+  {
+    "id": 5,
+    "name": "오비트 메카 01",
+    "series": "ORBIT WORKSHOP",
+    "category": "프라모델",
+    "price": 68000,
+    "color": "blue",
+    "kind": "robot",
+    "badge": "",
+    "scale": "1/144 스케일 · 16cm"
+  },
+  {
+    "id": 6,
+    "name": "루나 베어 · 드림",
+    "series": "MOON COLLECTIVE",
+    "category": "아트토이",
+    "price": 49000,
+    "color": "mint",
+    "kind": "forest",
+    "badge": "",
+    "scale": "논스케일 · 15cm"
+  }
+]

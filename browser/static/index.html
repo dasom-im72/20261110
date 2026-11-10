@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f5ef"><meta name="description" content="취향이 모이는 작은 우주, FIGROOM. 오리지널 피규어와 아트토이를 발견하세요.">
+  <title>FIGROOM — 취향이 모이는 작은 우주</title>
+  <link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body>
+  <div class="announcement">작은 피규어 하나로, 일상에 새로운 장면을. <span>MEET YOUR NEXT FAVORITE ↗</span></div>
+  <header class="header wrap">
+    <a class="logo" href="#" aria-label="피그룸 홈">figroom<span>®</span></a>
+    <nav aria-label="메인 메뉴"><a href="#collection">전체 상품</a><a href="#collection" data-nav="new">새로 들어왔어요 <i></i></a><a href="#collection" data-nav="preorder">예약 상품</a><a href="#story">브랜드 스토리</a></nav>
+    <div class="header-actions"><button class="icon-button" id="search-toggle" aria-label="상품 검색">⌕</button><button class="bag-button" id="cart-open" aria-label="장바구니 열기">BAG <span id="cart-count">0</span></button></div>
+  </header>
+  <main>
+    <section class="hero wrap">
+      <div class="hero-copy"><div class="eyebrow"><span class="little-star">✳</span> FOR YOUR LITTLE UNIVERSE</div><h1>당신의 취향에,<br>작은 우주를 더하다<span>.</span></h1><p>좋아하는 것으로 채운 공간은 조금 특별하니까.<br>매일 눈이 머무는 곳에, 나만의 피규어를 만나보세요.</p><a class="button dark" href="#collection">나의 취향 발견하기 <span>↗</span></a><div class="hero-foot"><span class="line"></span> SMALL FIGURES. BIG PERSONALITY.</div></div>
+      <div class="hero-art"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><div class="art-label">FIGROOM EXCLUSIVE<br><b>THE SPACE COLLECTION</b></div><span class="floating-star star-one">✦</span><span class="floating-star star-two">✧</span><div id="hero-figure" class="hero-figure" role="img" aria-label="민트색 우주복을 입은 코스믹 익스플로러 피규어"></div><div class="edition">01 / 06 <span>COLLECT THE MOMENT</span></div><div class="hero-tag"><span>NEW DROP</span><b>코스믹 익스플로러</b><small>새로운 세계를 향한 작은 모험</small></div><div class="round-label">MAKE<br>SPACE FOR<br><b>JOY ↗</b></div></div>
+    </section>
+    <div class="ticker" aria-hidden="true"><div>OBJECTS OF AFFECTION <span>✳</span> A LITTLE MORE YOU <span>✳</span> COLLECT YOUR UNIVERSE <span>✳</span> OBJECTS OF AFFECTION <span>✳</span> A LITTLE MORE YOU <span>✳</span></div></div>
+    <section class="collection wrap" id="collection"><div class="section-top"><div><div class="eyebrow">THE CURATED COLLECTION</div><h2>지금, 눈여겨볼 피규어<span>↘</span></h2></div><p>취향을 자극하는 작은 존재들.<br>당신의 다음 컬렉션을 찾아보세요.</p></div><div class="collection-controls"><div class="filters" role="group" aria-label="상품 카테고리"><button class="active" data-filter="전체">전체 보기 <span>06</span></button><button data-filter="오리지널">오리지널</button><button data-filter="아트토이">아트토이</button><button data-filter="프라모델">프라모델</button><button data-filter="예약">예약 상품</button></div><label class="sort-label"><span class="sr-only">상품 정렬</span><select id="sort"><option value="featured">추천순</option><option value="low">낮은 가격순</option><option value="high">높은 가격순</option></select></label></div><div id="search-panel" hidden><label for="search">어떤 피규어를 찾으세요?</label><input type="search" id="search" placeholder="상품명 또는 시리즈 검색" autocomplete="off"></div><div class="product-grid" id="products" aria-live="polite"><p>컬렉션을 불러오고 있습니다.</p></div><p class="demo-note">FIGROOM은 데모 스토어입니다. 상품·가격은 예시이며 실제 결제는 진행되지 않습니다.</p></section>
+    <section class="story wrap" id="story"><div class="story-art"><span>✳</span><b>MORE THAN<br>A FIGURE.</b><small>취향은, 가장 작은 곳에서 시작되니까.</small></div><div class="story-copy"><div class="eyebrow">OUR LITTLE OBSESSION</div><h2>작지만, 좋아하는 마음은<br>꽤 크니까요.</h2><p>책상 한 켠, 햇살이 드는 선반 위.<br>작은 피규어 하나가 만드는 기분 좋은 변화를 믿어요.<br>피그룸은 그 설레는 발견을 함께하는 공간입니다.</p><a href="#collection">나만의 컬렉션 시작하기 ↗</a></div></section>
+    <section class="benefits wrap"><div><span>◇</span><b>취향을 담은 큐레이션</b><p>오리지널부터 개성 있는 아트토이까지</p></div><div><span>□</span><b>소중하게, 안전하게</b><p>컬렉션의 첫 순간을 위한 꼼꼼한 포장</p></div><div><span>✧</span><b>기다림도 즐거운 신상품</b><p>새로운 컬렉션과 예약 상품을 한눈에</p></div></section>
+  </main>
+  <footer class="wrap"><div><a class="logo" href="#">figroom<span>®</span></a><p>A little universe of your own.</p></div><span>© 2026 FIGROOM. Demo concept store.</span><a href="#">맨 위로 ↑</a></footer>
+  <dialog id="product-dialog" aria-labelledby="detail-title"><button class="close" data-close aria-label="닫기">×</button><div id="product-detail"></div></dialog>
+  <dialog id="cart-dialog" aria-labelledby="cart-title"><button class="close" data-close aria-label="닫기">×</button><h2 id="cart-title">나의 장바구니</h2><div id="cart-items"></div><div class="cart-total">합계 <b id="cart-total"></b></div><p class="demo-note">데모 스토어로 실제 주문·결제는 지원하지 않습니다.</p><button class="button dark" data-close>계속 둘러보기 ↗</button></dialog>
+  <div id="toast" role="status"></div>
+</body>
+</html>
